@@ -1,6 +1,6 @@
 ;titulo: promedio.asm calcula el promedio de un alumno
 ;autor: Samaniego Cristian
-;		    Sanchez Mitzi 
+;	Sanchez Mitzi 
 ;fecha: 28 nov 2015
 
  	sys_read equ 3
@@ -8,18 +8,18 @@
 
 ;%include 'funciones.asm'		;incluir archivo funciones
 section .data
-	msjNombre	db	"name:",0x0                 ;declaramos msjNombre
+	msjNombre	db	"name:",0x0       ;declaramos msjNombre
 	msjCalificacion db "Calificacion ",0x0    ;declaramos msjCalificacion
 	msjDosPuntos db ": ",0x0                  ;declaramos msjDosPuntos
 	msjSeparador db "--------------------",0x0;declaramos msjSeparador
 	msjPromedio db "Promedio: ",0x0           ;declaramos msjPromedio
 	msjSemestre db "Semestre: ",0x0           ;declaramos msjSemestre
 	msjAprobado db "Aprobado",0x0             ;declaramos msjAprobado
-  msjReprobado db "Reprobado",0x0           ;declaramos msjReprobado   
+  msjReprobado db "Reprobado",0x0		  ;declaramos msjReprobado   
 section .bss 
 	Buffer resb 10                            ;reserva 10b
 	BufferNum resb 3                          ;reserva 3b
-	Buffer_len	equ $-Buffer                  ;calcula longitud de Buffer
+	Buffer_len	equ $-Buffer              ;calcula longitud de Buffer
 	BufferNum_len equ $-BufferNum             ;calcula longitud de BufferNum 
 section .text
 	global _start
