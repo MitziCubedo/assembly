@@ -15,7 +15,7 @@ section .data
 	msjPromedio db "Promedio: ",0x0           ;declaramos msjPromedio
 	msjSemestre db "Semestre: ",0x0           ;declaramos msjSemestre
 	msjAprobado db "Aprobado",0x0             ;declaramos msjAprobado
-  msjReprobado db "Reprobado",0x0		  ;declaramos msjReprobado   
+   	msjReprobado db "Reprobado",0x0		  ;declaramos msjReprobado   
 section .bss 
 	Buffer resb 10                            ;reserva 10b
 	BufferNum resb 5                          ;reserva 5b
@@ -27,79 +27,79 @@ section .text
 _start:
 
     pop ECX 		;obtenemos el numero de argumentos del stack
-    pop EAX 		;sacamos del nombre del programa del stack (el argumento 0)
+    pop EAX 		;sacamos el nombre del programa del stack (el argumento 0)
     dec ECX 		;le restamos 1 a ECX
-    pop EAX		;sacamos del stack el siguiente argumento (el num califs)
-    call atoi 		;convertimos el argumento a entero
+    pop EAX			;sacamos del stack el siguiente argumento (el num califs)
+    call atoi 		;convertimos el argumento a entero (de caracter a numero)
     cmp EAX, 0  	;checamos si hay califs a imprimir
-    jz quit   		;si cero, salimos
-    mov EBX, EAX	;compiamos el num de califs a ebx		
-    push EBX		;salvamos el num de califs al stack
+    jz quit   		;si no hay califs a imprimir, salimos
+    mov EBX, EAX	;compiamos el num de califs a EBX		
+    push EBX		;salvamos el num de califs en el stack
 	
     mov EAX, msjNombre	;preparamos para imprimir
-    call sprint 	;imprimimos
-    mov ECX, Buffer  	;preparamos para leer
-    mov EDX, Buffer_len ;detectamos long del mensaje
-    call LeerTexto	;convertimos mensaje a texto
-    mov EAX, Buffer	;copiamos lo recuperado a EAX
-    pop EBX 		;sacamos el num de califs del stack
-    mov ECX, 1 		;movemos 1 a ECX
-    mov EDX, 0 	   	;inicializamos en 0 EDX
+    call sprint 		;imprimimos msjNombre
+    mov ECX, Buffer  	;preparamos para leer el nombre (copiamos la direccion de buffer a ECX)
+    mov EDX, Buffer_len ;detectamos la longitud del mensaje
+    call LeerTexto		;leemos el mensaje 
+    mov EAX, Buffer		;copiamos el mensaje a EAX
+    pop EBX 			;sacamos el num de califs del stack
+    mov ECX, 1 			;movemos 1 a ECX 
+    mov EDX, 0 	   		;inicializamos en 0 EDX
 
 sigCalif:
-	cmp ECX, EBX 	  	;compramos el num de califs actual con el total
-	jg impReporte	        ;saltamos a impReporte
+	cmp ECX, EBX 	  		;comparamos el num de califs actual con el total
+	jg impReporte	        ;si la calif actual es igual a la calif total a imprimir, saltamos a impReporte
 	mov EAX, msjCalificacion;preparamos para imprimir
-	call sprint             ;imprimimos
+	call sprint             ;imprimimos msjCalificacion (primera parte del mensaje)
 	mov EAX, ECX	        ;preparamos para imprimir num de calif 
-	call iprint	        ;imprimimos
+	call iprint	        	;imprimimos num de calif actual (segunda parte del programa)
 	mov EAX, msjDosPuntos	;preparamos para imprimir 
-	call sprint     	;imprimimos ":"
-  push EBX				        ;salvamos en el stack EBX 
-	push ECX				        ;salvamos en el stack ECX
-	push EDX				        ;salvamos en el stack EDX
-  mov ECX, BufferNum 	  	;preparamos para leer
-	mov EDX, BufferNum_len	;detectamos long del mensaje
-	call LeerTexto			    ;convertimos a mensaje
-	mov EAX, BufferNum 		  ;copiamos lo recuperado a EAX
-	call atoi				        ;convertimos a numero 
-	pop EDX					        ;sacamos del stack
-	pop ECX					        ;sacamos del stack
-	pop EBX 				        ;sacamos del stack
-	add EDX, EAX			      ;sumamos la calif a EDX
-	inc ECX					        ;aumentamos en 1 a ECX
+	call sprint     		;imprimimos msjDosPuntos (ultima parte del mensaje)
+ 	push EBX			   	;salvamos en el stack EBX (num total de califs a imprimir)
+	push ECX		        ;salvamos en el stack ECX (num de calif actual)
+	push EDX		        ;salvamos en el stack EDX (suma de las califs)
+  	mov ECX, BufferNum 	  	;preparamos para leer la calif (copiamos la direccion de buffernum a ECX)
+	mov EDX, BufferNum_len	;detectamos longitud del mensaje
+	call LeerTexto			;leemos el mensaje 
+	mov EAX, BufferNum 	    ;copiamos el mensaje a EAX
+	call atoi				;convertimos a numero 
+	pop EDX					;sacamos del stack la suma de la califs
+	pop ECX					;sacamos del stack el num de calif actual
+	pop EBX 				;sacamos del stack el num total de califs a imprimir
+	add EDX, EAX			;sumamos la calif ingresada a EDX
+	inc ECX					;aumentamos en 1 a ECX (la calif actual)
 	
-	jmp sigCalif
+	jmp sigCalif			;iteramos
 	
 impReporte: 
-	push EBX 				      ;salvamos en el stack EBX 
-	push EDX 				      ;salvamos en el stack EDX
- 	mov EAX, msjSeparador	;preparamos para imprmir 
-	call sprintLF			    ;imprimimos
-	mov EAX, msjNombre		;preparamos para imprmir
-	call sprint 			    ;imprimimos
-	mov EAX, Buffer 		  ;preparamos para imprimir nombre
-	call sprint			 	    ;imprimimos
+	push EBX 				    ;salvamos en el stack EBX (el num total de califs)
+	push EDX 				    ;salvamos en el stack EDX (la suma de todas las califs)
+ 	mov EAX, msjSeparador		;preparamos para imprmir 
+	call sprintLF			    ;imprimimos msjSeparador
+	mov EAX, msjNombre			;preparamos para imprmir
+	call sprint 			    ;imprimimos msjNombre
+	mov EAX, Buffer 		  	;preparamos para imprimir nombre
+	call sprint			 	    ;imprimimos nombre del alumno
 	
 	mov EAX, msjPromedio 	;preparamos para imprimir
-	call sprint 			    ;imprimimos
+	call sprint 			;imprimimos msjPromedio
 
-	pop EAX  				    ;sacamos EAX del stack 
-  mov EDX, 1 			  	;movemos 1 a EDX
-  mul EDX 				    ;multiplicamos por 1
-	pop EBX 				    ;sacamos el numero de califs totales
-  div EBX					    ;dividimos la suma entre EBX
-	mov EDX, EAX 			  ;copiamos el promedio de EAX a EDX
-	push EDX 				    ;salvamos el promedio en el stack
-  call iprintLF		  	;imprimimos el promedio
+	pop EAX  			    ;sacamos EAX del stack (la suma de todas las califs)
+  	mov EDX, 1 			  	;movemos 1 a EDX
+  	mul EDX 				;multiplicamos por 1 
+	pop EBX 				;sacamos el numero de califs totales
+  	div EBX					;dividimos la suma entre EBX
+	mov EDX, EAX 			;copiamos el promedio de EAX a EDX
+	push EDX 				;salvamos el promedio en el stack
+ 	call iprintLF		  	;imprimimos el promedio
 
 	mov EAX, msjSemestre	;preparamos para imprimir el mensaje
-	call sprint 			    ;imprimimos 
-	cmp EDX, 60				    ;comparamos el promedio con 100
-    jl impReprobado        ;salta a impReprobado
-    mov EAX, msjAprobado;preparamos para imprimir
-    call sprintLF       ;imprimimos msjAprobado
-    call quit           ;salimos
+	call sprint 			;imprimimos msjSemestre
+	cmp EDX, 60				;comparamos el promedio con 60
+    jl impReprobado       	;si es el promedio es menor a 60, salta a impReprobado
+    mov EAX, msjAprobado	;preparamos para imprimir
+    call sprintLF       	;imprimimos msjAprobado
+    call quit           	;salimos
 
 impReprobado:
     mov EAX, msjReprobado   ;preparamos para imprimir
@@ -109,23 +109,23 @@ impReprobado:
 	
 	
 
-strlen:				  ;funcion strlen
-	push EBX		  ;salvamos el valor de EBX en la pila/stack
-	mov EBX, EAX	;copiamos la direccion del mensaje a EBX
+strlen:				  	;funcion strlen
+	push EBX		  	;salvamos el valor de EBX en la pila/stack
+	mov EBX, EAX		;copiamos la direccion del mensaje a EBX
 
 sigcar: 
-	cmp byte [EAX], 0 ;comparamos el byte que esta en la direccion 
-					          ;a la que apunta EAX con 0 (estamos buscando el	
-					          ;caracter de terminacion 0
-	jz finalizar	    ;jump if zero, salta a finalizar si es cero
-	inc EAX			      ;incrementamos en 1 el acumulador
+	cmp byte [EAX], 0 	;comparamos el byte que esta en la direccion 
+					  	;a la que apunta EAX con 0 (estamos buscando el	
+					  	;caracter de terminacion 0
+	jz finalizar	  	;jump if zero, salta a finalizar si es cero
+	inc EAX			    ;incrementamos en 1 el acumulador
 	jmp sigcar		    ;salto incondicional al siguiente caracter
 
 finalizar:
 	sub EAX, EBX	    ;restamos al valor inicial de memoria 
-						        ;el valor de final de memoria
-	pop EBX				    ;restablecer EBX
-	ret					      ;regresar al punto en que llamaron la funcion
+						;el valor de final de memoria
+	pop EBX			    ;restablecer EBX
+	ret			      	;regresar al punto en que llamaron la funcion
 
 sprint:
 	push EDX		;salvamos valor de EDX
@@ -135,7 +135,7 @@ sprint:
 	call strlen	;llamamos la funcion strlen
 	
 	mov EDX, EAX	;movemos la longitud de cadena a EDX
-	pop EAX			  ;traemos del stack el valor de EAX
+	pop EAX			;traemos del stack el valor de EAX
 	mov ECX, EAX	;la direccion del mensaje a ECX
 	mov EBX, 1 		;descriptor de archivo (stdout)
 	mov EAX, 4		;sys_write
@@ -151,13 +151,13 @@ sprintLF:
 	call sprint		;llama e imprime el mensaje
 	
 	push EAX		;salvamos el valor del acumulador (EAX), vamos a utilizarlo en esta funcion
-	mov EAX,0xA	;Hexadecimal para caracter de LineFeed
+	mov EAX,0xA		;Hexadecimal para caracter de LineFeed
 	push EAX		;salvamos el 0xA en el stack    trucoooo
-	mov EAX, ESP;pasamos direccion de0xA en el stack  // lo que apunta ESP(es la direccion del ultimo lugar de la pila) a EAX
-	call sprint	;llama e imprime linefeed 
+	mov EAX, ESP	;pasamos direccion de0xA en el stack  // lo que apunta ESP(es la direccion del ultimo lugar de la pila) a EAX
+	call sprint		;llama e imprime linefeed 
 	pop EAX			;recuperamos el caracter 0xA
 	pop EAX			;recuperamos el valor original de 0xA
-	ret				  ;regresamos
+	ret			    ;regresamos
 
 ;Funcion iprint (IntegerPrint) o impresion de enteros
 iprint:
@@ -165,43 +165,43 @@ iprint:
 	push ecx				;salvamos ecx en el stack (contador)   cuantos bytes echamos al stack
 	push edx				;salvamos edx en el stack (data)
 	push esi				;salvamos esi en el stack (source index)
-	mov ecx, 0			;vamos a contar cuantos bytes necesitamos imprimir
+	mov ecx, 0				;vamos a contar cuantos bytes necesitamos imprimir
 	
 dividirLoop:
 	inc ecx					;incrementar en 1 ecx
-	mov edx, 0 			;limpiamos edx
-	mov esi, 10			;guardamos 10 en esi, vamos a dividir entre 10
+	mov edx, 0 				;limpiamos edx
+	mov esi, 10				;guardamos 10 en esi, vamos a dividir entre 10
 	idiv esi				;divide eax entre esi, siempre divide a EAX lo que este en eax lo divide con el vqlor de esi	
-	add EDX, 48			;agregamos el caracter 48 '0' 
+	add EDX, 48				;agregamos el caracter 48 '0' 
 	push EDX				;la representación en ASCII de nuestro numero, lo guarda en el stack como caracter
-	cmp EAX, 0 			;se puede dividir mas el numero entero ?
-	jnz dividirLoop	;jump if not zero (salta si no es cero)
+	cmp EAX, 0 				;se puede dividir mas el numero entero ?
+	jnz dividirLoop			;jump if not zero (salta si no es cero)
 
 imprimirLoop:
 	dec ECX					;vamos a contar hacia abajo cada byte en el stack
-	mov EAX, ESP		;apuntador del stack a EAX
-	call sprint			;llamamos a la funcion sprint
+	mov EAX, ESP			;apuntador del stack a EAX
+	call sprint				;llamamos a la funcion sprint
 	pop EAX					;removemos el ulitmo caracter del stack y lo mandamos a el registro EAX
-	cmp ECX, 0 			;ya imprimimos todos los bytes del stack?
-	jnz imprimirLoop;todavia hay numero que imprimir
+	cmp ECX, 0 				;ya imprimimos todos los bytes del stack?
+	jnz imprimirLoop		;todavia hay numero que imprimir
 	
 	pop ESI 				;re-establecemos el valor de ESI
 	pop EDX					;re-establecemos el valor de EDX
-	pop ECX         ;re-establecemos el valor de ECX
+	pop ECX         		;re-establecemos el valor de ECX
 	pop EAX 				;re-establecemos el valor de EAX
 	ret
 
 ;funcion iprint (integer print) o impresion de enteros con line feed
 iprintLF:
 	call iprint 	;imprimimos el nuevo numero
-	push EAX			;salvamos el dato que traemos en el acumulador
+	push EAX		;salvamos el dato que traemos en el acumulador
 	mov EAX, 0xa 	;copiamos el código de linefeed a EAX
-	push EAX			;salvamos el linefeed en el stack
+	push EAX		;salvamos el linefeed en el stack
 	mov EAX, ESP	;copiamos el apuntador del stack a EAX
-						    ;estamos apuntando a una dirección de memoria
+					;estamos apuntando a una dirección de memoria
 	call sprint		;imprimimos el linefeed
-	pop EAX				;removemos el linefeed del stack
-	pop EAX				;restablecemos el dato que traiamos en el acumulador
+	pop EAX			;removemos el linefeed del stack
+	pop EAX			;restablecemos el dato que traiamos en el acumulador
 	ret			
 
 atoi:
@@ -213,10 +213,10 @@ atoi:
 	mov EAX, 0  ;inicializamos a cero EAX
 	mov ECX, 0 	;inicializamos a cero ECX
 	
-ciclomult:			    ;ciclo de multiplicacion
-	xor EBX, EBX	    ;reseteamos a 0 EBX, tanto BH como BL
+ciclomult:			  ;ciclo de multiplicacion
+	xor EBX, EBX	  ;reseteamos a 0 EBX, tanto BH como BL
 	mov BL, [ESI+ECX] ;movemosun solo byte a la parte baja de EBX
-	cmp BL, 48		    ;comparamos con ASCII '0'
+	cmp BL, 48		  ;comparamos con ASCII '0'
 	jl terminarP      ;si es menor, saltamos a finalizado
 	cmp BL, 57        ;comparamos con ASCII '9'
 	jg terminarP      ;si es mayor, saltamos a finalizado
@@ -244,7 +244,7 @@ terminarP:
 LeerTexto:
 	mov EBX, stdin		;Leemos de Standard Input
 	mov EAX, sys_read	;Funcion de Sistema Leer
-	int 80h				    ;Pedir a sistema operativo realizar lectura
+	int 80h				;Pedir a sistema operativo realizar lectura
 	ret		
 
 quit:	
