@@ -23,7 +23,7 @@ section .bss
 section .text
     global _start
 
-_start:
+_start: 
 
     pop ECX                     ;obtenemos el numero de argumentos del stack
     pop EAX                     ;sacamos el nombre del programa del stack (el argumento 0)
