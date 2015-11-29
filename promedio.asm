@@ -17,7 +17,7 @@ section .data
 	msjAprobado db "Aprobado",0x0             ;declaramos msjAprobado
    	msjReprobado db "Reprobado",0x0		  ;declaramos msjReprobado   
 section .bss 
-	Buffer resb 10                            ;reserva 10b
+	Buffer resb 45                            ;reserva 45b
 	BufferNum resb 5                          ;reserva 5b
 	Buffer_len	equ $-Buffer              ;calcula longitud de Buffer
 	BufferNum_len equ $-BufferNum             ;calcula longitud de BufferNum 
