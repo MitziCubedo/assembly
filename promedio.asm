@@ -8,7 +8,7 @@
 
 ;%include 'funciones.asm'		;incluir archivo funciones
 section .data
-	msjNombre db "Nombre del Alumno:",0x0     ;declaramos msjNombre
+	msjNombre db "Nombre del Alumno: ",0x0     ;declaramos msjNombre
 	msjCalificacion db "Calificacion ",0x0    ;declaramos msjCalificacion
 	msjDosPuntos db ": ",0x0                  ;declaramos msjDosPuntos
 	msjSeparador db "--------------------",0x0;declaramos msjSeparador
