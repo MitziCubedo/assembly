@@ -40,7 +40,7 @@ _start:
     call sprint 	;imprimimos
     mov ECX, Buffer  	;preparamos para leer
     mov EDX, Buffer_len ;detectamos long del mensaje
-    call LeerText	;convertimos mensaje a texto
+    call LeerTexto	;convertimos mensaje a texto
     mov EAX, Buffer	;copiamos lo recuperado a EAX
     pop EBX 		;sacamos el num de califs del stack
     mov ECX, 1 		;movemos 1 a ECX
