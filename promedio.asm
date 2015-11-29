@@ -41,7 +41,7 @@ _start:
     mov ECX, Buffer  	;preparamos para leer
     mov EDX, Buffer_len ;detectamos long del mensaje
     call LeerText	;convertimos mensaje a texto
-    mov EAX, Buffe	;copiamos lo recuperado a EAX
+    mov EAX, Buffer	;copiamos lo recuperado a EAX
     pop EBX 		;sacamos el num de califs del stack
     mov ECX, 1 		;movemos 1 a ECX
     mov EDX, 0 	   	;inicializamos en 0 EDX
