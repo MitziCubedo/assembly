@@ -8,7 +8,7 @@
 
 ;%include 'funciones.asm'		;incluir archivo funciones
 section .data
-	msjNombre	db	"name:",0x0       ;declaramos msjNombre
+	msjNombre db "Nombre del Alumno:",0x0     ;declaramos msjNombre
 	msjCalificacion db "Calificacion ",0x0    ;declaramos msjCalificacion
 	msjDosPuntos db ": ",0x0                  ;declaramos msjDosPuntos
 	msjSeparador db "--------------------",0x0;declaramos msjSeparador
@@ -29,32 +29,32 @@ _start:
     pop ECX 		;obtenemos el numero de argumentos del stack
     pop EAX 		;sacamos del nombre del programa del stack (el argumento 0)
     dec ECX 		;le restamos 1 a ECX
-    pop EAX			;sacamos del stack el siguiente argumento (el num califs)
-    call atoi 			;convertimos el argumento a entero
+    pop EAX		;sacamos del stack el siguiente argumento (el num califs)
+    call atoi 		;convertimos el argumento a entero
     cmp EAX, 0  	;checamos si hay califs a imprimir
-    jz quit   	;si cero, salimos
+    jz quit   		;si cero, salimos
     mov EBX, EAX	;compiamos el num de califs a ebx		
     push EBX		;salvamos el num de califs al stack
 	
-	mov EAX, msjNombre	;preparamos para imprimir
-	call sprint 		    ;imprimimos
-	mov ECX, Buffer 	  ;preparamos para leer
-	mov EDX, Buffer_len ;detectamos long del mensaje
-	call LeerTexto		  ;convertimos mensaje a texto
-	mov EAX, Buffer 	  ;copiamos lo recuperado a EAX
-	pop EBX 			      ;sacamos el num de califs del stack
-	mov ECX, 1  		    ;movemos 1 a ECX
-	mov EDX, 0 		    	;inicializamos en 0 EDX
+    mov EAX, msjNombre	;preparamos para imprimir
+    call sprint 	;imprimimos
+    mov ECX, Buffer  	;preparamos para leer
+    mov EDX, Buffer_len ;detectamos long del mensaje
+    call LeerText	;convertimos mensaje a texto
+    mov EAX, Buffe	;copiamos lo recuperado a EAX
+    pop EBX 		;sacamos el num de califs del stack
+    mov ECX, 1 		;movemos 1 a ECX
+    mov EDX, 0 	   	;inicializamos en 0 EDX
 
 sigCalif:
-	cmp ECX, EBX 			      ;compramos el num de califs actual con el total
-	jg impReporte			      ;saltamos a impReporte
+	cmp ECX, EBX 	  	;compramos el num de califs actual con el total
+	jg impReporte	        ;saltamos a impReporte
 	mov EAX, msjCalificacion;preparamos para imprimir
-	call sprint 			      ;imprimimos
-	mov EAX, ECX			      ;preparamos para imprimir num de calif 
-	call iprint				      ;imprimimos
-	mov EAX, msjDosPuntos	  ;preparamos para imprimir 
-	call sprint 			      ;imprimimos ":"
+	call sprint             ;imprimimos
+	mov EAX, ECX	        ;preparamos para imprimir num de calif 
+	call iprint	        ;imprimimos
+	mov EAX, msjDosPuntos	;preparamos para imprimir 
+	call sprint     	;imprimimos ":"
   push EBX				        ;salvamos en el stack EBX 
 	push ECX				        ;salvamos en el stack ECX
 	push EDX				        ;salvamos en el stack EDX
