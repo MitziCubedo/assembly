@@ -26,16 +26,14 @@ section .text
 
 _start:
 
-	pop ECX 		;obtenemos el numero de argumentos del stack
-	pop EAX 		;sacamos del nombre del programa del stack (el argumento 0)
-	dec ECX 		;le restamos 1 a ECX
-    pop EAX		;sacamos del stack el siguiente argumento (el num califs)
-    call atoi ;convertimos el argumento a entero
-	
-	cmp EAX, 0  ;checamos si hay califs a imprimir
-	jz quit   	;si cero, salimo
-        
-	mov EBX, EAX	;compiamos el num de califs a ebx		
+    pop ECX 		;obtenemos el numero de argumentos del stack
+    pop EAX 		;sacamos del nombre del programa del stack (el argumento 0)
+    dec ECX 		;le restamos 1 a ECX
+    pop EAX			;sacamos del stack el siguiente argumento (el num califs)
+    call atoi 			;convertimos el argumento a entero
+    cmp EAX, 0  	;checamos si hay califs a imprimir
+    jz quit   	;si cero, salimos
+    mov EBX, EAX	;compiamos el num de califs a ebx		
     push EBX		;salvamos el num de califs al stack
 	
 	mov EAX, msjNombre	;preparamos para imprimir
@@ -98,7 +96,7 @@ impReporte:
 	mov EAX, msjSemestre	;preparamos para imprimir el mensaje
 	call sprint 			    ;imprimimos 
 	cmp EDX, 60				    ;comparamos el promedio con 100
-    jl impReprob        ;salta a impReprobado
+    jl impReprobado        ;salta a impReprobado
     mov EAX, msjAprobado;preparamos para imprimir
     call sprintLF       ;imprimimos msjAprobado
     call quit           ;salimos
